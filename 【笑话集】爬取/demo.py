@@ -1,4 +1,5 @@
 import re
+import os
 import requests
 from lxml import etree
 
@@ -67,8 +68,13 @@ def get_content(html_url):
     # print(content)
     return category, title, content
 
-def save(category, title, content):
-    file = category + "+" + title + ".txt"
+def save(category, title, content, directory):
+    """
+    将文件保存到文件夹(directory)中...
+    """
+    if not os.path.exists(directory):
+        os.mkdir(directory)
+    file = directory + "/" + category + "+" + title + ".txt"
     with open (file, mode="a", encoding="utf-8") as f:
         f.write(content)
         print("正在保存...")
@@ -76,5 +82,5 @@ def save(category, title, content):
 
 if __name__ == "__main__":
     # print(get_response(url).text)
-    category,title, content = get_content(url)
-    save(category,title, content)
+    category, title, content = get_content(url)
+    save(category,title, content, "笑话")
