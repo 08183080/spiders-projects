@@ -34,12 +34,31 @@ def get_one_page_links(page_url):
     【情况】py code在2023/11/2深夜, 缺少灵感了, 准备睡觉, 凌晨2点喽...
     【参考】python爬虫经典书籍【Python爬虫开发 从入门到实战】
     """
-    response = get_response(page_url).text
-    # print(response)
-    tree = etree.HTML(response)
-    lists = tree.xpath()
-    print(lists)
+    ans = []
+    try:
+        response = get_response(page_url).text
+        # print(response)
+        tree = etree.HTML(response)
+        lists = tree.xpath("//a/@href")  # 当前界面的所有 超链接
+        # print(lists)
+        for list in lists:
+            if list[0:9] == "/jokehtml":
+                i = "http://www.jokeji.cn/" + list
+                print(i)
+                ans.append(i)
+    except Exception as e:
+        print(e)
+    return ans
 
+def get_all_links():
+    """
+    获取所有的link
+    """
+    url = "http://www.jokeji.cn/keyword.asp?me_page="
+    for i in range(1, 101):
+        u = url + str(i)
+        get_one_page_links(u)
 
-get_one_page_links(page_url)
+# get_one_page_links(page_url)
+get_all_links()
 
