@@ -54,6 +54,8 @@ def get_one_page_links(page_url):
         print(e)
     return ans
 
+
+
 def get_all_links():
     """
     获取所有的link
@@ -72,7 +74,7 @@ def dowload_one(url):
     """
     try:
         category, title, content = get_content(url)
-        print(category, title, content)
+        # print(category, title, content)
         save(category, title, content, "笑话")
     except Exception as e:
         print(e)
@@ -97,7 +99,7 @@ def download(urls):
         #     continue
         try:
             category, title, content = get_content(url)
-            print(category, title, content)
+            # print(category, title, content)
             save(category, title, content, "笑话")
         except Exception as e:
             print(e)
@@ -106,7 +108,8 @@ if __name__ == "__main__":
     ans = get_all_links()
     # download(ans)
     start_time = time.perf_counter()
-    download_all(ans) # 并发下载
+    download_all(ans) # 并发下载 下载耗时8.98323490000621s
+    download(ans) # 顺序下载 下载耗时26.213722700005746s
     end_time = time.perf_counter()
     print(f"下载耗时{end_time - start_time}s")
 
