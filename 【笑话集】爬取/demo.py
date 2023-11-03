@@ -60,7 +60,7 @@ def get_content(html_url):
 
         content = tree.xpath("/html/body/div[2]/div[1]/div[1]/ul/span/p/text()")
         content = '\n'.join(content)
-        print(content)
+        # print(content)
     except Exception as e:
         print(e)
     # for i in content:
@@ -77,7 +77,7 @@ def save(category, title, content, directory):
     file = directory + "/" + category + "+" + title + ".txt"
     with open (file, mode="a", encoding="utf-8") as f:
         f.write(content)
-        print("正在保存...")
+        print(f"{title}保存成功!")
     
 
 if __name__ == "__main__":

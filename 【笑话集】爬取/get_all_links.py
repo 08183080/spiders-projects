@@ -2,7 +2,10 @@
 获取所有的单页link
 """
 import re
+import time
 import requests
+import threading
+import concurrent.futures
 from lxml import etree
 from demo import get_content, save
 
@@ -57,11 +60,31 @@ def get_all_links():
     """
     ans = []
     url = "http://www.jokeji.cn/keyword.asp?me_page="
-    for i in range(2, 4):
+    for i in range(98, 100):
         u = url + str(i)
         links = get_one_page_links(u)
         ans += links
     return ans
+
+def dowload_one(url):
+    """
+    下载单张图片...
+    """
+    try:
+        category, title, content = get_content(url)
+        print(category, title, content)
+        save(category, title, content, "笑话")
+    except Exception as e:
+        print(e)
+
+
+def download_all(urls):
+    """
+    并发下载所有的url
+    """
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        executor.map(dowload_one, urls)
+    
 
 def download(urls):
     """
@@ -75,12 +98,15 @@ def download(urls):
         try:
             category, title, content = get_content(url)
             print(category, title, content)
-            save(category, title, content)
+            save(category, title, content, "笑话")
         except Exception as e:
             print(e)
 
-# get_one_page_links(page_url)
-ans = get_all_links()
-# print(ans)
-download(ans)
+if __name__ == "__main__":
+    ans = get_all_links()
+    # download(ans)
+    start_time = time.perf_counter()
+    download_all(ans) # 并发下载
+    end_time = time.perf_counter()
+    print(f"下载耗时{end_time - start_time}s")
 
