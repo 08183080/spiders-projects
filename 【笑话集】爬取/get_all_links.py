@@ -4,6 +4,7 @@
 import re
 import requests
 from lxml import etree
+from demo import get_content, save
 
 page_url = "http://www.jokeji.cn/keyword.asp?me_page=1"
 
@@ -43,7 +44,7 @@ def get_one_page_links(page_url):
         # print(lists)
         for list in lists:
             if list[0:9] == "/jokehtml":
-                i = "http://www.jokeji.cn/" + list
+                i = "http://www.jokeji.cn" + list
                 print(i)
                 ans.append(i)
     except Exception as e:
@@ -54,11 +55,32 @@ def get_all_links():
     """
     获取所有的link
     """
+    ans = []
     url = "http://www.jokeji.cn/keyword.asp?me_page="
-    for i in range(1, 101):
+    for i in range(2, 4):
         u = url + str(i)
-        get_one_page_links(u)
+        links = get_one_page_links(u)
+        ans += links
+    return ans
+
+def download(urls):
+    """
+    保存下载的所有
+    """
+    for url in urls:
+        print("---")
+        print(url)
+        # if url == "None":
+        #     continue
+        try:
+            category, title, content = get_content(url)
+            print(category, title, content)
+            save(category, title, content)
+        except Exception as e:
+            print(e)
 
 # get_one_page_links(page_url)
-get_all_links()
+ans = get_all_links()
+# print(ans)
+download(ans)
 

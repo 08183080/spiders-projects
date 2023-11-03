@@ -41,37 +41,40 @@ def get_content(html_url):
     parsel 使用里面css选择器去解析提取数据
 
     """
-    response = get_response(html_url).text
-    tree = etree.HTML(response)
-    category = tree.xpath("//h1/a/text()")[1]
-    # print(category)
-    title = tree.xpath("//h1/text()")[1]
-    # print(title)
+    try:
+        response = get_response(html_url).text
+        tree = etree.HTML(response)
+        category = tree.xpath("//h1/a/text()")[1]
+        # print(category)
+        title = tree.xpath("//h1/text()")[1]
+        # print(title)
 
-    # 匹配中文开头字符串
-    pattern = re.compile(r'[\u4e00-\u9fa5]')
-    match = pattern.search(title)
-    if match:
-        start_index = match.start()
-        title = title[start_index:]
-        print(title)
+        # 匹配中文开头字符串
+        pattern = re.compile(r'[\u4e00-\u9fa5]')
+        match = pattern.search(title)
+        if match:
+            start_index = match.start()
+            title = title[start_index:]
+            print(title)
 
-    content = tree.xpath("/html/body/div[2]/div[1]/div[1]/ul/span/p/text()")
-    content = '\n'.join(content)
-    print(content)
+        content = tree.xpath("/html/body/div[2]/div[1]/div[1]/ul/span/p/text()")
+        content = '\n'.join(content)
+        print(content)
+    except Exception as e:
+        print(e)
     # for i in content:
     #     print(i)
     # print(content)
-    return category,title, content
+    return category, title, content
 
-def save(category,title, content):
+def save(category, title, content):
     file = category + "+" + title + ".txt"
     with open (file, mode="a", encoding="utf-8") as f:
         f.write(content)
         print("正在保存...")
     
 
-
-# print(get_response(url).text)
-category,title, content = get_content(url)
-save(category,title, content)
+if __name__ == "__main__":
+    # print(get_response(url).text)
+    category,title, content = get_content(url)
+    save(category,title, content)
