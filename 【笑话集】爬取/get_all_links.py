@@ -62,7 +62,7 @@ def get_all_links():
     """
     ans = []
     url = "http://www.jokeji.cn/keyword.asp?me_page="
-    for i in range(98, 100):
+    for i in range(200, 240):
         u = url + str(i)
         links = get_one_page_links(u)
         ans += links
