@@ -47,22 +47,7 @@ def get_code(image, verify_type="60000"):
     return resp.json()['data']['data']
 
 
-if __name__ == "__main__":
-
-    # 1. 将验证码保存本地
-    url = "https://so.gushiwen.cn/user/login.aspx?from=http://so.gushiwen.cn/user/collect.aspx"
-    img_data = download_png(url)
-    
-    # 2. 调用打码平台示例程序进行验证码识别
-    # 2.1 我们自己封装整理出一个识别验证码的函数
-    code_text = get_code(image=img_data, verify_type="10110")
-    print('识别结果: ', code_text)
-
-    # 2.2 导入其他文件中的类【其他的方法】
-    # y = YdmVerify()
-    # y.common_verify(img_data,10110) 
-
-    login_url = "https://so.gushiwen.cn/user/login.aspx?from=http%3a%2f%2fso.gushiwen.cn%2fuser%2fcollect.aspx"
+def login(login_url, code_text):
     data = {
         "__VIEWSTATE": "kgCPZcmBWciXXasiCxE7SctULlln4O+k98VKRAWxZ+/4eoyvGjYbpVEpuWc6cYrG0o19/bAUzzCVBEbDDTHaAM1uN/+H1oEDRnGDRDKRZkHOVLXzim78bORTqa4a5sYzH2zpFagM/bB+LInuWdOqHt8iwS8=",
         "__VIEWSTATEGENERATOR": "C93BE1AE",
@@ -73,7 +58,18 @@ if __name__ == "__main__":
         "denglu": "登录"
     }
 
-    resp = requests.post(url=login_url, headers=headers, data=data)
-    print(resp.status_code)
-    # print(resp.text)
-    # 返回200，则是响应成功...
+    resp = requests.post(url = login_url, headers = headers, data = data)
+    print(resp.status_code)    
+
+if __name__ == "__main__":
+
+    # 1. 将验证码保存本地
+    url = "https://so.gushiwen.cn/user/login.aspx?from=http://so.gushiwen.cn/user/collect.aspx"
+    img_data = download_png(url)
+    
+    # 2. 调用打码平台示例程序进行验证码识别
+    code_text = get_code(image=img_data, verify_type="10110")
+    print('识别结果: ', code_text)
+
+    login_url = "https://so.gushiwen.cn/user/login.aspx?from=http%3a%2f%2fso.gushiwen.cn%2fuser%2fcollect.aspx"
+    login(login_url, code_text)
